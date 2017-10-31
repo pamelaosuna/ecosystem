@@ -41,6 +41,8 @@ int main(void) {
 	afficher_ecosys(*liste_proies,*liste_predateurs);
 	printf("OK pour afficher ecosysteme\n");
 
+	liberer_liste_animaux(liste_proies);
+	liberer_liste_animaux(liste_predateurs);
 
   return 0;
 }

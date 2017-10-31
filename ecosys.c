@@ -12,6 +12,18 @@
 /* Pour utiliser la correction automatique:
 cavecorrector 6-7 repertoire
  */
+void liberer_liste_animaux(Animal *liste) {
+	Animal *np = liste;
+	if (!liste) return;
+	assert(!liste->precedent);
+	do {
+		np = liste->suivant
+		free(liste);
+		free(liste->dir); // validation?
+		liste=np;
+	}
+	while (liste);
+}
 
 Animal *creer_animal(int x, int y, float energie) {
 	srand(time(NULL));
@@ -35,7 +47,7 @@ Animal *ajouter_en_tete_animal(Animal *liste, Animal *animal) {
 		return animal;
 	}
 	animal->suivant=liste;
-	animal->precedent=animal;
+	liste->precedent=animal;
 	return animal;
 
 }
@@ -58,7 +70,7 @@ void enlever_animal(Animal **liste, Animal *animal) {
 	int liste_deja_parcourue=0;
 
 	while ((p!=animal) && (!liste_deja_parcourue)){
-		p++;
+		p=p->suivant;
 		if (p==*liste){
 			liste_deja_parcourue=1;
 		}
@@ -85,7 +97,9 @@ unsigned int compte_animal_it(Animal *la) {
 	assert(la);
 	int k=0;
 
-	while(!la){
+	while(la){
+	// while (!la) {
+		la=la->suivant;
 		k++;
 	}
   return k;
@@ -127,6 +141,7 @@ void afficher_ecosys(Animal *liste_proie,Animal *liste_predateur) {
 	}
 	printf("OK pour le remplisage vide du tableau a deux dimensions\n");
   while (p) {
+	// while (!p) {
 		printf("On est rentres dans la boucle while\n ");
 		if (p->x>=SIZE_X || p->y>=SIZE_Y){
 				printf("Erreur dans les coordonnees d'une proie");
@@ -143,6 +158,7 @@ void afficher_ecosys(Animal *liste_proie,Animal *liste_predateur) {
 	printf("OK pour la liste des proies\n");
 	p=liste_predateur;
 	while (p) {
+	// while (!p) {
 		if ((tab[p->x][p->y]=='*') || (tab[p->x][p->y]=='@')) {
 			tab[p->x][p->y]='@';
 			p=p->suivant;
