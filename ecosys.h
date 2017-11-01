@@ -44,4 +44,6 @@ void afficher_ecosys(Animal *liste_predateur, Animal *liste_proie);
 
 void clear_screen();
 
+void liberer_liste_animaux(Animal *liste);
+
 #endif
