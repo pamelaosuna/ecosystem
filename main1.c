@@ -17,29 +17,49 @@ float energie=50;
 
 
 int main(void) {
-	int i;
+	int i,x,y;
 
 	srand(time(NULL));
-	Animal *liste_proies[NB_PROIES];
-	Animal *liste_predateurs[NB_PREDATEURS];
-	Animal *anim;
+
+
+	Animal *liste_proies=(Animal *)malloc(sizeof(Animal)*(NB_PROIES));
+	Animal *liste_predateurs=(Animal *)malloc(sizeof(Animal)*(NB_PREDATEURS));
+
 	printf("tout se passe bien avant la boucle for\n");
+
+	printf("\nPROIES\n");
 	for (i=0; i<NB_PROIES; i++) {
-		//liste_proies[i]=creer_animal(rand()%SIZE_X, rand()%SIZE_Y, energie);
-		anim=creer_animal(rand()%SIZE_X, rand()%SIZE_Y, energie);
+		x=rand()%SIZE_X;
+		y=rand()%SIZE_Y;
+		printf("---------------------------\n");
 		printf("OK pour creer animal, i = %d\n", i);
-		ajouter_en_tete_animal(*liste_proies,anim);
+		printf("Ses coordoonnees sont (%d,%d)\n", x,y);
+		printf("---------------------------\n");
+		ajouter_animal(x,y,&liste_proies);
+		if (i==0) liste_proies->suivant=NULL;
 		printf("OK pour l'ajouter a la liste\n");
+
 	}
+
+
+	printf("\nPREDATEURS\n");
 	for (i=0; i<NB_PREDATEURS; i++) {
-		//liste_predateurs[i]=creer_animal(rand()%SIZE_X, rand()%SIZE_Y, energie);
-		anim=creer_animal(rand()%SIZE_X, rand()%SIZE_Y, energie);
+		x=rand()%SIZE_X;
+		y=rand()%SIZE_Y;
+		printf("---------------------------\n");
 		printf("OK pour creer animal, i = %d\n", i);
-		ajouter_en_tete_animal(*liste_predateurs,anim);
+		printf("Ses coordoonnees sont (%d,%d)\n", x,y);
+		printf("---------------------------\n");
+
+		ajouter_animal(x,y,&liste_predateurs);
+		if (i==0) liste_predateurs->suivant=NULL;
 		printf("OK pour l'ajouter a la liste\n");
+
+
 	}
-	afficher_ecosys(*liste_proies,*liste_predateurs);
+	afficher_ecosys(liste_proies,liste_predateurs);
 	printf("OK pour afficher ecosysteme\n");
+
 
 	liberer_liste_animaux(liste_proies);
 	liberer_liste_animaux(liste_predateurs);
