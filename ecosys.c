@@ -12,18 +12,6 @@
 /* Pour utiliser la correction automatique:
 cavecorrector 6-7 repertoire
  */
-void liberer_liste_animaux(Animal *liste) {
-	Animal *np = liste;
-	if (!liste) return;
-	assert(!liste->precedent);
-	do {
-		np = liste->suivant
-		free(liste);
-		free(liste->dir); // validation?
-		liste=np;
-	}
-	while (liste);
-}
 
 Animal *creer_animal(int x, int y, float energie) {
 	srand(time(NULL));
@@ -204,4 +192,17 @@ void afficher_ecosys(Animal *liste_proie,Animal *liste_predateur) {
 
 void clear_screen() {
   printf("\x1b[2J\x1b[1;1H");  /* code ANSI X3.4 pour effacer l'ecran */
+}
+
+void liberer_liste_animaux(Animal *liste) {
+	Animal *np = liste;
+	if (!liste) return;
+	assert(!liste->precedent);
+	do {
+		np = liste->suivant;
+		free(liste);
+		free(liste->dir); // validation?
+		liste=np;
+	}
+	while (liste);
 }
