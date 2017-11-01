@@ -12,21 +12,9 @@
 /* Pour utiliser la correction automatique:
 cavecorrector 6-7 repertoire
  */
-void liberer_liste_animaux(Animal *liste) {
-	Animal *np = liste;
-	if (!liste) return;
-	assert(!liste->precedent);
-	do {
-		np = liste->suivant
-		free(liste);
-		free(liste->dir); // validation?
-		liste=np;
-	}
-	while (liste);
-}
+
 
 Animal *creer_animal(int x, int y, float energie) {
-	srand(time(NULL));
 
 	Animal *animal = (Animal*)malloc(sizeof(Animal));
 	assert (animal!= NULL);
@@ -70,7 +58,7 @@ void enlever_animal(Animal **liste, Animal *animal) {
 	int liste_deja_parcourue=0;
 
 	while ((p!=animal) && (!liste_deja_parcourue)){
-		p=p->suivant;
+		p++;
 		if (p==*liste){
 			liste_deja_parcourue=1;
 		}
@@ -97,9 +85,7 @@ unsigned int compte_animal_it(Animal *la) {
 	assert(la);
 	int k=0;
 
-	while(la){
-	// while (!la) {
-		la=la->suivant;
+	while(!la){
 		k++;
 	}
   return k;
@@ -131,77 +117,73 @@ void afficher_ecosys(Animal *liste_proie,Animal *liste_predateur) {
 
 	// creation tableau
 	char tab[SIZE_X][SIZE_Y];
-	int i,j,k;
+	int i,j,k=0;
 	Animal *p=liste_proie;
 
 	for (i=0;i<SIZE_X;i++){
 		for (j=0;j<SIZE_Y;j++){
-			tab[i][j]=' ';
+			tab[i][j]='-';
 		}
 	}
 	printf("OK pour le remplisage vide du tableau a deux dimensions\n");
   while (p) {
-	// while (!p) {
-		printf("On est rentres dans la boucle while\n ");
+		printf("Iteration %d dans la boucle while\n ",k);
+		k++;
 		if (p->x>=SIZE_X || p->y>=SIZE_Y){
 				printf("Erreur dans les coordonnees d'une proie");
 		}
 		printf("x = %d, y = %d\n", p->x,p->y);
+		if (tab[p->x][p->y]=='*') printf("Plus d'une proie dans la case (%d,%d)\n", p->x,p->y);
 		tab[p->x][p->y]='*';
-		printf("OK pour une proie\n");
-		if (p->suivant==NULL){
-				printf("L'animal suivant n'a pas un sucesseur\n");
-		}
+
 		p=p->suivant;
-		//p++;
 	}
 	printf("OK pour la liste des proies\n");
 	p=liste_predateur;
+	k=0;
 	while (p) {
-	// while (!p) {
+		printf("Iteration %d dans la boucle while\n ",k);
+		k++;
+		if (p->x>=SIZE_X || p->y>=SIZE_Y){
+				printf("Erreur dans les coordonnees d'une predateur");
+		}
+		printf("x = %d, y = %d\n", p->x,p->y);
 		if ((tab[p->x][p->y]=='*') || (tab[p->x][p->y]=='@')) {
 			tab[p->x][p->y]='@';
 			p=p->suivant;
-			//p++;
+
 		}else{
+			if (tab[p->x][p->y]=='0') printf("Plus d'un predateur dans la case (%d,%d)\n", p->x,p->y);
 			tab[p->x][p->y]='O';
 			p=p->suivant;
-			//p++;
 		}
 	}
 
 
-	/*for (k=0;k<NB_PROIES,k++) {
-		printf("On est rentres dans la boucle for, k = %d\n ", i);
-		if (liste_proie[k]->x>=SIZE_X || liste_proie[k]->y>=SIZE_Y){
-				printf("Erreur dans les coordonnees d'une proie");
-		}
-		tab[p->x][p->y]='*';
-		printf("OK pour une proie\n");
-		if (p->suivant==NULL){
-				printf("L'animal suivant n'a pas un sucesseur\n");
-		}
-		p++;
-	}
-	printf("OK pour la liste des proies\n");
-	p=liste_predateur;
-	while (p) {
-		if ((tab[p->x][p->y]=='*') || (tab[p->x][p->y]=='@')) {
-			tab[p->x][p->y]='@';
-		}else{
-			tab[p->x][p->y]='O';
-		}
-	}*/
 
 	for (i=0;i<SIZE_X;i++){
 		printf("\n");
 		for (j=0;j<SIZE_Y;j++){
-			printf("%c\t",tab[i][j]);
-		}
+			printf("%c ",tab[i][j]);
+		}printf("\n");
 	}
 
 }
 
 void clear_screen() {
   printf("\x1b[2J\x1b[1;1H");  /* code ANSI X3.4 pour effacer l'ecran */
+}
+
+void liberer_liste_animaux(Animal *liste) {
+	Animal *np = liste;
+	if (!liste) return;
+	assert(!liste->precedent);
+	do {
+		np = liste->suivant;
+		free(liste);
+		//free(liste->dir); // validation? Pas necessaire car c etait pas alloue dynamiquement
+		liste=np;
+	} while (liste);
+
+
 }
